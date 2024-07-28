@@ -9,7 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -27,7 +28,12 @@ public class Product implements Serializable {
 	@Column(name = "product_id")
 	private long productId;
 
+	private String brand;
+
 	private String name;
+
+	@Column(name = "is_featured")
+	private boolean isFeatured;
 
 	private String description;
 
@@ -37,22 +43,28 @@ public class Product implements Serializable {
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 	private Set<ProductVariant> variants;
 
-	@ManyToMany(mappedBy = "products")
-	private Set<Category> categories;
+//	@ManyToMany(mappedBy = "products")
+//	private Set<Category> categories;
+
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+	private Category category;
 
 	public Product() {
 		super();
 	}
 
-	public Product(long productId, String name, String description, double basePrice, Set<ProductVariant> variants,
-			Set<Category> categories) {
+	public Product(long productId, String brand, String name, boolean isFeatured, String description, double basePrice,
+			Set<ProductVariant> variants, Category category) {
 		super();
 		this.productId = productId;
+		this.brand = brand;
 		this.name = name;
+		this.isFeatured = isFeatured;
 		this.description = description;
 		this.basePrice = basePrice;
 		this.variants = variants;
-		this.categories = categories;
+		this.category = category;
 	}
 
 	public long getProductId() {
@@ -95,12 +107,28 @@ public class Product implements Serializable {
 		this.variants = variants;
 	}
 
-	public Set<Category> getCategories() {
-		return categories;
+	public Category getCategory() {
+		return category;
 	}
 
-	public void setCategories(Set<Category> categories) {
-		this.categories = categories;
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+
+	public boolean isFeatured() {
+		return isFeatured;
+	}
+
+	public void setFeatured(boolean isFeatured) {
+		this.isFeatured = isFeatured;
 	}
 
 }

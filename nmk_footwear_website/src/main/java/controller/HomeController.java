@@ -1,13 +1,17 @@
 package controller;
 
+import java.io.IOException;
+import java.util.List;
+
+import dao.ProductDAO;
+import jakarta.persistence.EntityManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Cart;
-
-import java.io.IOException;
+import model.Product;
+import utility.JPAUtil;
 
 @WebServlet("/home")
 public class HomeController extends HttpServlet {
@@ -27,14 +31,15 @@ public class HomeController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		EntityManager manager = JPAUtil.getEntityManagerFactory().createEntityManager();
 
-//		if (request.getSession().getAttribute("cart") != null) {
-//			Cart cart = (Cart) request.getSession().getAttribute("cart");
-//			System.out.println("cart size : " + cart.getCartItems().size() + "item : "
-//					+ cart.getCartItems().iterator().next().getProductVariant().getProduct().getName());
-//		}
+		// Get feature products
+		ProductDAO productDAO = new ProductDAO(manager);
+		List<Product> featuredProducts = productDAO.getFeaturedProducts();
 
-		request.getRequestDispatcher("jsp/index.jsp").forward(request, response);
+		request.setAttribute("products", featuredProducts);
+
+		request.getRequestDispatcher("jsp/home.jsp").forward(request, response);
 	}
 
 	/**

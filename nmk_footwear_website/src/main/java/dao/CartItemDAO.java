@@ -5,6 +5,7 @@ import java.util.List;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import model.CartItem;
+import model.CartItemId;
 
 public class CartItemDAO implements GenericDAO<CartItem> {
 
@@ -50,38 +51,41 @@ public class CartItemDAO implements GenericDAO<CartItem> {
 	@Override
 	public void delete(CartItem object) {
 		EntityTransaction transaction = null;
+		System.out.println("CartItem ENTER DELETE");
 
 		try {
 			transaction = manager.getTransaction();
 			transaction.begin();
 			manager.remove(object);
 			transaction.commit();
+			System.out.println("CartItem deleted.");
 		} catch (Exception e) {
+
 			if (transaction != null && transaction.isActive()) {
 				transaction.rollback();
 			}
+			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public CartItem findById(Object id) {
-		return manager.find(CartItem.class, id);
+		CartItemId cartItemId = (CartItemId) id;
+
+		try {
+			return manager.createQuery(
+					"from CartItem where cart.cartId = :cartId and productVariant.productVariantId = :productVariantId",
+					CartItem.class).setParameter("cartId", cartItemId.getCartId())
+					.setParameter("productVariantId", cartItemId.getProductVariantId()).getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+
 	}
 
 	@Override
 	public List<CartItem> findAll() {
 		return manager.createQuery("from CartItem", CartItem.class).getResultList();
 	}
-	
-	public CartItem findByCartIdAndProductVariantId(long cartId, long productVariantId) {
-		try {
-			return manager
-					.createQuery("from CartItem where cart.cartId = :cartId and productVariant.productVariantId = :productVariantId", CartItem.class)
-					.setParameter("cartId", cartId)
-					.setParameter("productVariantId", productVariantId)
-					.getSingleResult();
-		} catch (Exception e) {
-			return null;
-		}
-	}
+
 }

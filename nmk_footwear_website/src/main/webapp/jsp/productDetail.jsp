@@ -54,7 +54,7 @@
                 if(selectedVariant) {
                 	console.log(selectedVariant);
                 	
-                	document.getElementById('price').innerText = selectedVariant.price;
+                	document.getElementById('price').innerText = '$' + selectedVariant.price;
                 	document.getElementById('in-stock-quantity').innerText = 'This product has ' + selectedVariant.stockQuantity + ' pair(s) left.';
                 	document.getElementById('product-variant-id').value = selectedVariant.productVariantId; // Update hidden input with variant ID
                 	console.log(selectedVariant.productVariantId);

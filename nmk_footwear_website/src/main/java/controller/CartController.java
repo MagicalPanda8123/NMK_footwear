@@ -5,6 +5,7 @@ import java.io.IOException;
 import dao.CartDAO;
 import dao.CartItemDAO;
 import dao.ProductVariantDAO;
+import dao.UserDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -48,17 +49,12 @@ public class CartController extends HttpServlet {
 		User user = (User) request.getSession().getAttribute("user");
 
 		if (user != null) {
+			UserDAO userDAO = new UserDAO(manager);
+			user = userDAO.getUserByUsername(user.getUsername());
 			// get the cart from the database according to the user id retrieved from the
 			// session.
 			CartDAO cartDAO = new CartDAO(manager);
 			Cart cart = cartDAO.findByUserId(user.getUserId());
-
-			// check if the cart is null or not.
-			if (cart == null) {
-				// Create a new cart if there isn't one in the database.
-				cart = new Cart();
-				cartDAO.save(cart);
-			}
 
 			// Set the cart in the session.
 			request.getSession().setAttribute("cart", cart);
@@ -122,12 +118,12 @@ public class CartController extends HttpServlet {
 			// There is a user logged in.
 			CartDAO cartDAO = new CartDAO(manager);
 			CartItemDAO cartItemDAO = new CartItemDAO(manager);
-			
+
 			Cart cart = cartDAO.findByUserId(user.getUserId());
 
 			// Retrieve associated cart item from the database.
-			CartItem cartItem = cartItemDAO.findByCartIdAndProductVariantId(cart.getCartId(),
-					productVariant.getProductVariantId());
+			CartItem cartItem = cartItemDAO
+					.findById(new CartItemId(cart.getCartId(), productVariant.getProductVariantId()));
 
 			if (cartItem == null) {
 				// Cart item not found in the database. Create a new cart item.
@@ -180,9 +176,10 @@ public class CartController extends HttpServlet {
 
 			System.out.println(cart.getCartId());
 			System.out.println(productVariant.getProductVariantId());
-			
-			CartItem cartItem = cartItemDAO.findByCartIdAndProductVariantId(cart.getCartId(),
-					productVariant.getProductVariantId());
+
+			CartItem cartItem = cartItemDAO
+					.findById(new CartItemId(cart.getCartId(), productVariant.getProductVariantId()));
+
 			cartItem.setQuantity(quantity);
 			cartItem.calculateSubtotal();
 			cartItemDAO.update(cartItem);
@@ -206,14 +203,14 @@ public class CartController extends HttpServlet {
 
 			Cart cart = cartDAO.findByUserId(user.getUserId());
 
-			CartItem cartItem = cartItemDAO.findByCartIdAndProductVariantId(cart.getCartId(),
-					productVariant.getProductVariantId());
+			CartItem cartItem = cartItemDAO
+					.findById(new CartItemId(cart.getCartId(), productVariant.getProductVariantId()));
 
 			cartItemDAO.delete(cartItem);
 			cart.getCartItems().remove(cartItem);
 			cart.calculateTotalPrice();
 			cartDAO.update(cart);
-			
+
 			session.setAttribute("cart", cart);
 		} else {
 			// Handle guest users.

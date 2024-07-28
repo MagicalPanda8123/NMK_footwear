@@ -11,95 +11,11 @@
     <url-pattern>/ProductsController</url-pattern>
   </servlet-mapping>
   <display-name>nmk_footwear_website</display-name>
+  
   <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
+    <welcome-file>home</welcome-file>
   </welcome-file-list>
-  <listener>
-    <listener-class>listener.ApplicationContextListener</listener-class>
-  </listener>
-  <servlet>
-    <description></description>
-    <display-name>homeController</display-name>
-    <servlet-name>homeController</servlet-name>
-    <servlet-class>controller.homeController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>homeController</servlet-name>
-    <url-pattern>/homeController</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>AccountController</display-name>
-    <servlet-name>AccountController</servlet-name>
-    <servlet-class>controller.AccountController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AccountController</servlet-name>
-    <url-pattern>/AccountController</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>CartController</display-name>
-    <servlet-name>CartController</servlet-name>
-    <servlet-class>controller.CartController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>CartController</servlet-name>
-    <url-pattern>/CartController</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>CheckOutController</display-name>
-    <servlet-name>CheckOutController</servlet-name>
-    <servlet-class>controller.CheckOutController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>CheckOutController</servlet-name>
-    <url-pattern>/CheckOutController</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>ProductDetailController</display-name>
-    <servlet-name>ProductDetailController</servlet-name>
-    <servlet-class>controller.ProductDetailController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ProductDetailController</servlet-name>
-    <url-pattern>/ProductDetailController</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>LogoutController</display-name>
-    <servlet-name>LogoutController</servlet-name>
-    <servlet-class>controller.LogoutController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>LogoutController</servlet-name>
-    <url-pattern>/LogoutController</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>PromotionController</display-name>
-    <servlet-name>PromotionController</servlet-name>
-    <servlet-class>controller.PromotionController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>PromotionController</servlet-name>
-    <url-pattern>/PromotionController</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>OrderController</display-name>
-    <servlet-name>OrderController</servlet-name>
-    <servlet-class>controller.OrderController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>OrderController</servlet-name>
-    <url-pattern>/OrderController</url-pattern>
-  </servlet-mapping>
+  
+
+
 </web-app>

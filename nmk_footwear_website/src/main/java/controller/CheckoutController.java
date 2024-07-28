@@ -38,15 +38,6 @@ public class CheckoutController extends HttpServlet {
 		}
 		else {
 			// if the user is logged in, redirect to the checkout page.
-			
-//			// Initialize the Order object and set it in the session.
-//			Order order = new Order();
-//			order.setOrderDate(java.time.LocalDate.now());
-//			order.setOrderStatus(OrderStatus.PENDING);
-//			order.setPaymentMethod(PaymentMethod.CASH_ON_DELIVERY);
-//			order.setUser(user);
-			
-			
 			request.getRequestDispatcher("jsp/checkout.jsp").forward(request, response);
 		}
 	}

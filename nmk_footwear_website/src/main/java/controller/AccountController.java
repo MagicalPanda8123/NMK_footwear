@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import dao.CartDAO;
+import dao.CartItemDAO;
 import dao.UserDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.ServletException;
@@ -58,7 +59,6 @@ public class AccountController extends HttpServlet {
 		String password = request.getParameter("password");
 
 		if (checkLogin(username, password)) {
-			// System.out.println("User logged in");
 			User user = userDAO.getUserByUsername(username);
 			request.getSession().setAttribute("user", user);
 
@@ -67,12 +67,6 @@ public class AccountController extends HttpServlet {
 			CartSession cartSession = (CartSession) request.getSession().getAttribute("cart");
 
 			migrateSessionCartToUserCart(cartSession, user);
-			
-			System.out.println("cart id : " + user.getCart().getCartId());
-			System.out.println("user id attached to cart : " + user.getCart().getUser().getUserId());
-			System.out.println("User cart size : " + user.getCart().getCartItems().size());
-
-			request.getSession().setAttribute("cart", user.getCart());
 
 			response.sendRedirect("home");
 			return;
@@ -102,18 +96,19 @@ public class AccountController extends HttpServlet {
 	private void migrateSessionCartToUserCart(CartSession sessionCart, User user) {
 		EntityManager manager = JPAUtil.getEntityManagerFactory().createEntityManager();
 
+		// Re-attach the user object to the current persistence context.
+		UserDAO userDAO = new UserDAO(manager);
+		user = userDAO.getUserByUsername(user.getUsername());
+
 		if (user.getCart() != null) {
 			return;
 		}
 
-		Cart userCart = user.getCart();
-		
-		userCart = new Cart();
-
 		// Persist the user cart to get the ID generated first.
-		manager.getTransaction().begin();
-		manager.persist(userCart);
-		manager.getTransaction().commit();
+		Cart userCart = new Cart();
+
+		CartDAO cartDAO = new CartDAO(manager);
+		cartDAO.save(userCart);
 
 		userCart.setUser(user);
 		user.setCart(userCart);
@@ -122,33 +117,30 @@ public class AccountController extends HttpServlet {
 
 		if (sessionCart != null) {
 			for (CartItemSession sessionItem : sessionCart.getCartItems()) {
-				CartItem userItem = new CartItem();
-
 				// Create CartItemId
 				CartItemId id = new CartItemId();
-
-				System.out.println(userCart.getCartId());
-
 				id.setCartId(userCart.getCartId());
 				id.setProductVariantId(sessionItem.getProductVariant().getProductVariantId());
 
+				// Create new CartItem
+				CartItem userItem = new CartItem();
 				userItem.setId(id);
 				userItem.setProductVariant(sessionItem.getProductVariant());
 				userItem.setQuantity(sessionItem.getQuantity());
 				userItem.setPrice(sessionItem.getPrice());
 				userItem.calculateSubtotal();
 
-				userCartItems.add(userItem);
+				// Save the cart item
+				CartItemDAO cartItemDAO = new CartItemDAO(manager);
+				cartItemDAO.save(userItem);
 			}
 		}
 
 		userCart.setCartItems(userCartItems);
 		userCart.calculateTotalPrice();
-		
-		manager.getTransaction().begin();
-		manager.merge(user);
-		manager.merge(userCart);
-		manager.getTransaction().commit();
+
+		userDAO.update(user);
+		cartDAO.update(userCart);
 	}
 
 }

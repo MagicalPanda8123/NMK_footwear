@@ -24,51 +24,44 @@
         <h2 class="title">All Products</h2>
 
         <div class="filter-bar">
-           <form id="filter-form" action="" method="get">
+           <form id="filter-form" action="products" method="post">
                 <div class="row">
                     <div class="col-2">
-                        <label for="price-filter">Price sorting &#36;</label> <br>
-                        <select name="price-filter" id="price-filter">
-                            <option value="default">Default sorting</option>
+                        <label for="price">Price sorting &#36;</label> <br>
+                        <select name="price" id="price">
                             <option value="asc">&#8593; Sort by price (ascending)</option>
                             <option value="desc">&#8595; Sort by price (descending)</option>
                         </select>
                     </div>
                     <div class="col-2">
-                        <label for="type-filter">Type</label>
-                        <select name="type-filter" id="type-filter">
-                            <option value="all">All</option>
-                            <option value="sneaker">Sneaker</option>
-                            <option value="slides">Slides</option>
+                        <label for="type">Type</label>
+                        <select name="type" id="type">
+                            <option value="All">All</option>
+                            <option value="Sneaker">Sneaker</option>
+                            <option value="Slides">Slides</option>
                         </select>
                     </div>
                    
                 </div>
                 <div class="row">
-                    <div class="col-2">
-                        <label for="brand-filter">Brand</label> <br>
-                        <select name="brand-filter" id="brand-filter">
-                            <option value="all">All</option>
-                            <option value="nike">Nike</option>
-                            <option value="jordan">Jordan</option>
-                            <option value="adidas">Adidas</option>
-                            <option value="new balance">New Balance</option>
-                        </select>
+                	<div class="col-2">
+                        <label for="name">Search</label> <br>
+                        <input type="text" name="name" id="name">
                     </div>
                     <div class="col-2">
-                        <label for="gender-filter">Gender</label> <br>
-                        <input type="radio" name="gender" value="all" id="all" checked> all
-                        <input type="radio" name="gender" value="male" id="male"> male &#9794;
-                        <input type="radio" name="gender" value="female" id="female"> female &#9792;
+                        <label for="brand">Brand</label> <br>
+                        <select name="brand" id="brand">
+                            <option value="All">All</option>
+                            <option value="Nike">Nike</option>
+                            <option value="Adidas">Adidas</option>
+                            <option value="New Balance">New Balance</option>
+                            <option value="Puma">Puma</option>
+                        </select>
                     </div>
                 </div>
                 
                 <div class="row">
-                    <div class="col-2">
-                        <label for="search">Search</label> <br>
-                        <input type="text" name="search" id="search">
-                    </div>
-                    <div class="col-2">
+                    <div class="col-1">
                         <button type="submit">Search</button>
                     </div>
                 </div>
@@ -90,7 +83,7 @@
 		        	<a href='<c:url value='product-detail?productId=${product.productId}' />'>
 		               <img src="<c:url value='${variant.imageURL}'/>" alt="${product.name}">
 		               <h4>${product.name}</h4>
-		               <p>${variant.price}</p>
+		               <p>&#36;${variant.price}</p>
 		        	</a>
 	            </div>
 	        </c:forEach>

@@ -77,8 +77,7 @@ public class CartDAO implements GenericDAO<Cart> {
 	public Cart findByUserId(long userId) {
 		try {
 			return manager.createQuery("from Cart c where c.user.userId = :userId", Cart.class)
-					.setParameter("userId", userId)
-					.getSingleResult();
+					.setParameter("userId", userId).getSingleResult();
 		} catch (Exception e) {
 			return null;
 		}

@@ -29,6 +29,7 @@ import model.PaymentMethod;
 import model.ProductVariant;
 import model.Promotion;
 import model.User;
+import utility.JPAUtil;
 
 /**
  * Servlet implementation class OrderController
@@ -61,16 +62,14 @@ public class OrderController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		EntityManager manager = (EntityManager) request.getAttribute("EntityManager");
-		User user = (User) request.getSession().getAttribute("user");
 
 		processOrder(request, response);
 
-		response.sendRedirect(request.getContextPath() + "/order.jsp");
+		response.sendRedirect(request.getContextPath() + "/orderResult.jsp");
 	}
 
 	private void processOrder(HttpServletRequest request, HttpServletResponse response) {
-		EntityManager manager = (EntityManager) request.getAttribute("EntityManager");
+		EntityManager manager = JPAUtil.getEntityManagerFactory().createEntityManager();
 		User user = (User) request.getSession().getAttribute("user");
 
 		// Retrieve form parameters

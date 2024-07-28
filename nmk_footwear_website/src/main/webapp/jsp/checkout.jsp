@@ -177,7 +177,7 @@
 							<label for="payment-method">Payment method</label>
 						</div>
 						<div class="col-2">
-							<select name="payment-method" id="payment-method" required>
+							<select name="paymentMethod" id="payment-method" required>
 								<option value="CREDIT_CARD">Credit card</option>
 								<option value="BANK_TRANSFER">Bank transfer</option>
 								<option value="CASH_ON_DELIVERY">COD</option>

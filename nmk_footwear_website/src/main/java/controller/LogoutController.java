@@ -1,9 +1,11 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Set;
 
 import dao.CartDAO;
 import dao.CartItemDAO;
+import dao.UserDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,9 +15,6 @@ import model.CartItem;
 import model.User;
 import utility.JPAUtil;
 
-/**
- * Servlet implemeoller
- */
 @WebServlet("/logout")
 public class LogoutController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -34,16 +33,6 @@ public class LogoutController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// Persist the user's cart
-		User user = (User) request.getSession().getAttribute("user");
-		CartDAO cartDAO = new CartDAO(JPAUtil.getEntityManagerFactory().createEntityManager());
-		cartDAO.update(user.getCart());
-
-		CartItemDAO cartItemDAO = new CartItemDAO(JPAUtil.getEntityManagerFactory().createEntityManager());
-		for (CartItem item : user.getCart().getCartItems()) {
-			cartItemDAO.update(item);
-		}
-
 		// Invalidate the session to log the user out
 		request.getSession().invalidate();
 
